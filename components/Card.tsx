@@ -2,7 +2,10 @@ import React from "react";
 import { View, StyleSheet, ViewStyle } from "react-native";
 import { COLORS } from "../theme";
 
-type Props = { children: React.ReactNode; style?: ViewStyle | ViewStyle[] };
+type Props = Readonly<{ 
+  children: React.ReactNode; 
+  style?: ViewStyle | ViewStyle[];
+}>;
 
 export default function Card({ children, style }: Props) {
   return <View style={[styles.card, style]}>{children}</View>;

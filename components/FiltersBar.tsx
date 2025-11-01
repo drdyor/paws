@@ -4,20 +4,18 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { COLORS, SPACING } from "../theme";
 import type { DiscoveryFilters } from "../types";
 
-type Props = {
+type Props = Readonly<{
   value: DiscoveryFilters;
   onChange: (next: DiscoveryFilters) => void;
-};
+}>;
 
-const Chip = ({
-  label,
-  active,
-  onPress,
-}: {
+type ChipProps = Readonly<{
   label: string;
   active: boolean;
   onPress: () => void;
-}) => (
+}>;
+
+const Chip = ({ label, active, onPress }: ChipProps) => (
   <TouchableOpacity
     onPress={onPress}
     style={[

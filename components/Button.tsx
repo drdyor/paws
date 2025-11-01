@@ -2,12 +2,12 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
 import { COLORS } from "../theme";
 
-type Props = {
+type Props = Readonly<{
   title: string;
   onPress: () => void;
   tone?: "primary" | "secondary";
   style?: ViewStyle | ViewStyle[];
-};
+}>;
 
 export default function Button({ title, onPress, tone = "primary", style }: Props) {
   return (

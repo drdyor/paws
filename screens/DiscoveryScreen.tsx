@@ -28,7 +28,7 @@ const USER_COORDS = { lat: 35.8989, lon: 14.5146 };
 function distKm(a: { lat: number; lon: number }, b: { lat: number; lon: number }) {
   const dx = (a.lat - b.lat) * 111;
   const dy = (a.lon - b.lon) * 85;
-  return Math.max(0, Math.round(Math.sqrt(dx * dx + dy * dy)));
+  return Math.max(0, Math.round(Math.hypot(dx, dy)));
 }
 
 function matchPercent(p: Pet): number {
@@ -88,6 +88,43 @@ const MOCK: Pet[] = [
     coords: { lat: 35.896, lon: 14.468 },
   },
 ];
+
+// Header counters component (moved outside to avoid recreation on every render)
+type HeaderCountersProps = Readonly<{
+  current: Pet | undefined;
+  filtered: Pet[];
+  index: number;
+}>;
+
+function HeaderCounters({ current, filtered, index }: HeaderCountersProps) {
+  if (!current) return null;
+  const km = current.coords ? distKm(USER_COORDS, current.coords) : 2;
+  const mp = matchPercent(current);
+  
+  return (
+    <View style={styles.headerRow}>
+      <View style={styles.badgeSoft}>
+        <Text style={styles.badgeSoftText}>📍 {km} km</Text>
+      </View>
+      <View style={styles.badgeSoft}>
+        <Text style={styles.badgeSoftText}>✨ {mp}% match</Text>
+      </View>
+      <View style={{ flex: 1 }} />
+      {/* dot pagination */}
+      <View style={styles.dots}>
+        {filtered.slice(index, index + 3).map((pet, i) => (
+          <View
+            key={`${pet.id}-dot-${i}`}
+            style={[
+              styles.dot,
+              { opacity: i === 0 ? 1 : 0.35, transform: [{ scale: i === 0 ? 1.1 : 1 }] },
+            ]}
+          />
+        ))}
+      </View>
+    </View>
+  );
+}
 
 export default function DiscoveryScreen() {
   const [filters, setFilters] = useState<DiscoveryFilters>({
@@ -177,36 +214,6 @@ export default function DiscoveryScreen() {
     setLiked([]);
   }
 
-  // ——— Header counters (distance + match %)
-  function HeaderCounters() {
-    if (!current) return null;
-    const km = current.coords ? distKm(USER_COORDS, current.coords) : 2;
-    const mp = matchPercent(current);
-    return (
-      <View style={styles.headerRow}>
-        <View style={styles.badgeSoft}>
-          <Text style={styles.badgeSoftText}>📍 {km} km</Text>
-        </View>
-        <View style={styles.badgeSoft}>
-          <Text style={styles.badgeSoftText}>✨ {mp}% match</Text>
-        </View>
-        <View style={{ flex: 1 }} />
-        {/* dot pagination */}
-        <View style={styles.dots}>
-          {filtered.slice(index, index + 3).map((_, i) => (
-            <View
-              key={i}
-              style={[
-                styles.dot,
-                { opacity: i === 0 ? 1 : 0.35, transform: [{ scale: i === 0 ? 1.1 : 1 }] },
-              ]}
-            />
-          ))}
-        </View>
-      </View>
-    );
-  }
-
   if (!current) {
     return (
       <View style={styles.empty}>
@@ -224,7 +231,7 @@ export default function DiscoveryScreen() {
       <FiltersBar value={filters} onChange={setFilters} />
 
       {/* Counters + dots */}
-      <HeaderCounters />
+      <HeaderCounters current={current} filtered={filtered} index={index} />
 
       {/* Next card (peeking) */}
       {next && (
