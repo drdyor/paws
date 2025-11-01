@@ -2,10 +2,10 @@
 // Alternative Discovery Screen using the Tinder-style swiper library
 import React, { useState, useMemo } from "react";
 import { View, StyleSheet } from "react-native";
-import TinderSwiper from "./components/TinderSwiper";
-import FiltersBar from "./components/FiltersBar";
-import { COLORS, SPACING } from "./theme";
-import type { Pet, DiscoveryFilters } from "./types";
+import TinderSwiper from "../components/TinderSwiper";
+import FiltersBar from "../components/FiltersBar";
+import { COLORS, SPACING } from "../theme";
+import type { Pet, DiscoveryFilters } from "../types";
 
 // Demo user location (Valletta coords)
 const USER_COORDS = { lat: 35.8989, lon: 14.5146 };
