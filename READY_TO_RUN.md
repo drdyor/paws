@@ -1,184 +1,262 @@
-# ? PawMatch - Ready to Run!
+# ? SEED DATA READY TO RUN!
 
-## ?? You're Now Using the BETTER Discovery Screen
+## ?? Real User UUIDs Applied
 
-I've switched you to **DiscoveryTinderScreen.tsx** which uses `react-native-deck-swiper` - a modern, professional library that's:
-- ? More polished than the original tinder-react-native repo
-- ?? Better maintained (original repo is from 2019)
-- ?? More features (Super Like, better animations)
-- ?? Less code to maintain
+| Role | UUID |
+|------|------|
+| **Breeder** | `c5f922f8-6c50-40a2-912d-a011e5725ce6` |
+| **Seeker** | `78de48d9-0638-4a98-9e97-a863cbd41d28` |
+| **Shelter** | `0ded84ca-caae-4851-82bb-77bdaf25e1b9` |
 
 ---
 
-## ?? Quick Start Commands
+## ?? Run Seed Data Now (2 minutes)
+
+### Step 1: Open Supabase SQL Editor
+```
+https://supabase.com/dashboard/project/bdpbjsciaekgcdpvqomr/sql
+```
+
+### Step 2: Copy SEED_DATA.sql
+Copy the **entire contents** of `/workspace/SEED_DATA.sql`
+
+### Step 3: Paste & Run
+1. Paste into SQL Editor
+2. Click **"Run"** button
+3. Wait for success message (should take 2-3 seconds)
+
+---
+
+## ?? What This Creates
+
+### Profiles (3)
+- ? **Indy Breeder** (breeder@demo.dev) - Independent breeder in Valletta
+- ? **Pet Seeker** (seeker@demo.dev) - Looking for pets in Malta
+- ? **Valletta Shelter** (shelter@demo.dev) - Animal shelter
+
+### Pets (3)
+1. **Luna** ??
+   - Border Collie, female, in heat
+   - Owner: Breeder
+   - Status: Available for breeding
+   - Has health check badge ?
+   - Has active heat cycle
+
+2. **Max** ??
+   - Golden Retriever, male, stud
+   - Owner: Breeder
+   - Status: Stud available
+   - Has vaccination badge ?
+   - Health records on file
+
+3. **Misty** ??
+   - British Shorthair, female
+   - Owner: Shelter
+   - Status: **At risk** (urgent placement needed!)
+   - At-risk until: 14 days from today
+
+### Listings (2)
+1. **Luna ? Border Collie** - ?350, Live listing
+2. **URGENT: Misty (British Shorthair)** - Free adoption, Urgent flag ??
+
+### Health Records (2)
+- Max: Rabies booster (30 days ago)
+- Luna: Annual health check (60 days ago)
+
+### Heat Cycle (1)
+- **Luna's heat cycle** started 2 days ago
+- Auto-computed fertile window: Days 10-14
+- Auto-computed estimated ovulation: Day 12
+- Next heat estimate: 180 days from start
+
+### Community Interaction (2)
+- Seeker upvoted Luna ??
+- Seeker downvoted Misty ??
+
+### Match (1)
+- **Seeker ? Luna** (auto-created by trigger!)
+- Created when seeker super-liked Luna
+- Status: New
+
+### Conversation (1)
+**Between Breeder & Seeker:**
+- **Seeker**: "Hi! Super liked Luna ? is she available to meet this week?"
+- **Breeder**: "Yes! Wednesday evening in Valletta works. I'll share the vet papers."
+
+---
+
+## ? Triggers That Auto-Fire
+
+When you run the seed data, these triggers will automatically execute:
+
+### 1. `handle_super_like()`
+- When seeker super-likes Luna
+- **Auto-creates** match record
+- Links seeker ? breeder
+
+### 2. `recompute_fertile_window()`
+- When Luna's heat cycle is inserted
+- **Auto-calculates**:
+  - Estimated ovulation: `heat_start_date + 12 days`
+  - Fertile window: Days 10-14
+  - Next heat estimate: `heat_start_date + 180 days`
+
+### 3. `touch_updated_at()`
+- On every update
+- **Auto-updates** `updated_at` timestamp
+
+---
+
+## ?? Verify in Table Editor
+
+After running, check these tables in Supabase Dashboard ? **Table Editor**:
+
+| Table | Expected Rows | What to Check |
+|-------|---------------|---------------|
+| `profiles` | 3 | Names: "Indy Breeder", "Pet Seeker", "Valletta Shelter" |
+| `pets` | 3 | Names: Luna, Max, Misty |
+| `pet_images` | 3 | All have Unsplash image URLs |
+| `listings` | 2 | 1 normal, 1 urgent |
+| `heat_cycles` | 1 | Luna's cycle with auto-computed dates |
+| `matches` | 1 | Seeker ? Luna (auto-created!) |
+| `pet_interactions` | 1 | Seeker super-liked Luna |
+| `pet_votes` | 2 | 1 upvote, 1 downvote |
+| `messages` | 2 | Conversation between breeder & seeker |
+| `conversation_participants` | 2 | Breeder and seeker in conversation |
+| `badge_grants` | 2 | Luna (vet_checked), Max (vaccinated) |
+| `health_records` | 2 | Max (rabies), Luna (checkup) |
+
+---
+
+## ?? Test Discovery Feed
+
+After seed data is loaded, test the app:
 
 ```bash
-# 1. Install all dependencies
+cd /workspace
 npm install
-
-# 2. Install Expo-specific packages
-expo install react-native-gesture-handler expo-haptics @react-native-async-storage/async-storage
-
-# 3. Install navigation and Supabase
-npm i @react-navigation/native @react-navigation/native-stack react-native-url-polyfill @supabase/supabase-js
-
-# 4. Start the app
 npm start
 ```
 
-Then scan the QR code with **Expo Go** app on your phone!
+Scan QR code with Expo Go, then:
+
+1. **Login as seeker** (seeker@demo.dev)
+2. Open Discovery screen
+3. You should see:
+   - **Luna** (Border Collie, ?350, in heat)
+   - **Misty** (British Shorthair, FREE, URGENT flag!)
+4. Swipe right ? Creates interaction
+5. Super-like ? Auto-creates match!
 
 ---
 
-## ?? What You'll See
+## ?? Sample Queries to Try
 
-1. **Onboarding Screen** - Choose your role (Seeker, Breeder, Shelter, Vet)
-2. **Select "Seeker"** to test the discovery
-3. **Tinder-Style Swipe Deck** with:
-   - ? Smooth card animations
-   - ?? Like (swipe right or tap heart)
-   - ?? Nope (swipe left or tap X)
-   - ? Super Like (swipe up)
-   - ?? Match percentage badges
-   - ?? Distance indicators
-   - ?? 3 demo pets (Luna, Max, Misha)
+After seed data loads, try these in SQL Editor:
 
----
-
-## ?? Features You'll Experience
-
-### Discovery Screen Features:
-- ? Tinder-style card stack with peeking
-- ? Swipe gestures with rotation
-- ? LIKE/NOPE/SUPER LIKE overlay labels
-- ? Filter chips (Dogs/Cats/Both, Adopt/Sale, Urgent)
-- ? Match percentage algorithm
-- ? Distance calculation
-- ? Haptic feedback on swipes
-- ? Smooth 60fps animations
-- ? Card counter (1/3, 2/3, etc.)
-- ? Empty state when deck is done
-
-### Other Role Dashboards:
-- **Breeder:** Manage breeding animals
-- **Shelter:** Intake management with urgency flags
-- **Vet:** Issue health certificates
-- **Profile:** User account stub
-
----
-
-## ?? If You Get Errors
-
-### Common Issues:
-
-**Error: "react-native-deck-swiper not found"**
-```bash
-npm install react-native-deck-swiper
+### See all pets with images
+```sql
+SELECT 
+  p.name, 
+  p.species, 
+  p.breed, 
+  p.status,
+  pi.url as first_image
+FROM pets p
+LEFT JOIN pet_images pi ON pi.pet_id = p.id AND pi.sort_order = 0
+WHERE p.deleted_at IS NULL;
 ```
 
-**Error: "react-native-gesture-handler not found"**
-```bash
-expo install react-native-gesture-handler
+### See fertile pets today
+```sql
+SELECT * FROM v_pets_fertile_today;
 ```
 
-**Error: "Cannot find module './screens/...'"**
-- This is already fixed! Files are in correct folders now.
-
-**Error: Metro bundler cache issues**
-```bash
-expo start -c
+### See all matches
+```sql
+SELECT 
+  m.status,
+  p.name as pet_name,
+  seeker.full_name as seeker_name,
+  owner.full_name as owner_name
+FROM matches m
+JOIN pets p ON p.id = m.pet_id
+JOIN profiles seeker ON seeker.id = m.seeker_user_id
+JOIN profiles owner ON owner.id = m.owner_user_id;
 ```
 
----
+### Get vote counts for Luna
+```sql
+SELECT * FROM pet_vote_counts('9a1e1111-aaaa-4bbb-cccc-111111111111');
+```
 
-## ?? To Switch Back to Custom Discovery
-
-If you want to test the custom implementation instead:
-
-Open `/workspace/navigation/SeekerStack.tsx` and change:
-
-```typescript
-// FROM:
-import DiscoveryTinderScreen from "../screens/DiscoveryTinderScreen";
-component={DiscoveryTinderScreen}
-
-// TO:
-import DiscoveryScreen from "../screens/DiscoveryScreen";
-component={DiscoveryScreen}
+### See conversation messages
+```sql
+SELECT 
+  sender.full_name as sender,
+  receiver.full_name as receiver,
+  content,
+  created_at
+FROM messages m
+JOIN profiles sender ON sender.id = m.sender_id
+JOIN profiles receiver ON receiver.id = m.receiver_id
+ORDER BY created_at;
 ```
 
 ---
 
-## ?? Project Structure (All Fixed!)
+## ? Success Indicators
 
-```
-pawmatch/
-??? App.tsx                          ? Entry point
-??? package.json                     ? Dependencies
-??? app.json                         ? Expo config
-??? babel.config.js                  ? Babel config (fixed)
-??? tsconfig.json                    ? TypeScript config
-??? theme.ts                         ? Colors & spacing
-??? types.ts                         ? TypeScript types
-??? components/                      ? Reusable UI
-?   ??? Button.tsx
-?   ??? Card.tsx
-?   ??? FiltersBar.tsx
-?   ??? SwipeCard.tsx               ? NEW
-?   ??? TinderSwiper.tsx            ? NEW
-?   ??? index.ts
-??? navigation/                      ? All routes
-?   ??? AppNavigator.tsx
-?   ??? SeekerStack.tsx             ? NOW USES TinderSwiper!
-?   ??? BreederStack.tsx
-?   ??? ShelterStack.tsx
-?   ??? VetStack.tsx
-??? screens/                         ? All screens
-?   ??? OnboardingScreen.tsx
-?   ??? DiscoveryScreen.tsx         (Custom - backup)
-?   ??? DiscoveryTinderScreen.tsx   ? ACTIVE (Library-based)
-?   ??? BreederDashboard.tsx
-?   ??? ShelterDashboard.tsx
-?   ??? VetDashboard.tsx
-?   ??? ProfileScreen.tsx
-??? services/                        ? Backend
-    ??? supabase.ts
+You'll know it worked if:
 
-? All imports fixed
-? All folders organized
-? All dependencies ready
-? Ready to run!
+- ? No SQL errors
+- ? 3 rows in `profiles` table
+- ? 3 rows in `pets` table
+- ? 1 row in `matches` (auto-created by trigger!)
+- ? Heat cycle has `fertile_window_start` populated (auto-computed!)
+- ? Messages exist in conversation
+
+---
+
+## ?? You're Done!
+
+After running seed data, you have:
+
+- ? Complete test dataset
+- ? All relationships connected
+- ? Triggers tested
+- ? Ready for app testing
+
+**Next:** Test the app with `npm start` and login as any of the 3 users! ??
+
+---
+
+## ?? Troubleshooting
+
+### Error: "violates foreign key constraint"
+**Solution:** Make sure you ran `PRODUCTION_SCHEMA.sql` first!
+
+### Error: "duplicate key value violates unique constraint"
+**Solution:** Seed data already loaded! Safe to ignore or delete existing data first.
+
+### No errors but tables empty
+**Solution:** Check you're looking at the correct database project in Supabase dashboard.
+
+### Triggers didn't fire
+**Solution:** Verify triggers exist:
+```sql
+SELECT * FROM pg_trigger WHERE tgname LIKE '%super%' OR tgname LIKE '%heat%';
 ```
 
 ---
 
-## ?? Final Notes
+## ?? Files Reference
 
-### Why This is Better Than the Original Repo:
-
-| Feature | Original Repo | Your Integration |
-|---------|--------------|------------------|
-| React Native | 0.59.9 (2019) | 0.74.3 (2024) ? |
-| Library | card-stack-swiper (old) | deck-swiper (modern) ? |
-| Language | JavaScript | TypeScript ? |
-| Components | Class-based | Hooks ? |
-| Maintenance | Not active | Active ? |
-| Features | Basic | Enhanced ? |
-
-**You got the UPGRADED version!** ??
+- **`PRODUCTION_SCHEMA.sql`** - Run this first (creates all tables)
+- **`SEED_DATA.sql`** - Run this second (with real UUIDs ?)
+- **`services/pawmatch-production.ts`** - API layer for your app
+- **`DATABASE_SETUP_COMPLETE.md`** - Full setup guide
 
 ---
 
-## ?? Ready to Test!
-
-Run the commands above and enjoy your Tinder-style pet discovery! 
-
-The app is production-ready with:
-- ? Clean code structure
-- ? TypeScript type safety
-- ? Modern React patterns
-- ? Professional animations
-- ? Malta-inspired design
-- ? Supabase ready
-
-**Let me know if you hit ANY errors and I'll fix them immediately!** ??
+**Ready to run! Copy `SEED_DATA.sql` to Supabase now!** ??

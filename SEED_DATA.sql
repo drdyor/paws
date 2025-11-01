@@ -7,21 +7,15 @@
 -- Get these from: Supabase Dashboard ? Authentication ? Users
 -- Example: '11111111-1111-1111-1111-111111111111'
 
--- Safety check to prevent running with placeholder UUIDs
-DO $$
-BEGIN
-  IF 'BREEDER_UUID_HERE' = 'BREEDER_UUID_HERE' THEN
-    RAISE EXCEPTION 'Replace BREEDER_UUID_HERE/SEEKER_UUID_HERE/SHELTER_UUID_HERE with real auth.users UUIDs before running.';
-  END IF;
-END$$;
+-- ? Real user UUIDs provided - safety check removed
 
 -- Static UUIDs for deterministic upserts (keeps this seed idempotent)
 DO $$
 DECLARE
-  -- User IDs (REPLACE THESE!)
-  u_breeder uuid := 'BREEDER_UUID_HERE';
-  u_seeker uuid := 'SEEKER_UUID_HERE';
-  u_shelter uuid := 'SHELTER_UUID_HERE';
+  -- User IDs (? REAL UUIDs)
+  u_breeder uuid := 'c5f922f8-6c50-40a2-912d-a011e5725ce6';
+  u_seeker uuid := '78de48d9-0638-4a98-9e97-a863cbd41d28';
+  u_shelter uuid := '0ded84ca-caae-4851-82bb-77bdaf25e1b9';
 
   -- Pet IDs (fixed for idempotency)
   pet_luna uuid := '9a1e1111-aaaa-4bbb-cccc-111111111111';
