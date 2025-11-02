@@ -11,11 +11,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "platforms": ["ios", "android", "web"],
+    "platforms": ["ios", "android"],
     "updates": { "fallbackToCacheTimeout": 0 },
     "assetBundlePatterns": ["**/*"],
     "ios": { "supportsTablet": true },
-    "android": { "adaptiveIcon": { "foregroundImage": "./assets/adaptive-icon.png", "backgroundColor": "#ffffff" } },
-    "web": { "bundler": "metro", "output": "static" }
+    "android": { "adaptiveIcon": { "foregroundImage": "./assets/adaptive-icon.png", "backgroundColor": "#ffffff" } }
   }
 }
